@@ -4,10 +4,9 @@ import { Menu, X } from "lucide-react";
 import React from "react";
 
 const menuItems = [
-  { name: "Home", href: "/" },
   { name: "Teams", href: "/teams" },
-  { name: "Bidding", href: "/bidding" },
   { name: "Query", href: "/contact" },
+  { name: "Coordinators", href: "/coordinators" },
 ];
 
 export const HeroHeader = () => {
@@ -44,7 +43,7 @@ export const HeroHeader = () => {
                     <li key={index}>
                       <Link
                         href={item.href}
-                        className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                        className=" hover:text-accent-foreground block duration-150"
                       >
                         <span>{item.name}</span>
                       </Link>

@@ -6,19 +6,23 @@ import Lenis from "@studio-freight/lenis";
 import { useEffect, useRef, useState } from "react";
 
 const images = [
-  "/images/lummi/img15.png",
-  "/images/lummi/img21.png",
-  "/images/lummi/img3.png",
-  "/images/lummi/img4.png",
-  "/images/lummi/img5.png",
-  "/images/lummi/img6.png",
-  "/images/lummi/img7.png",
-  "/images/lummi/img8.png",
-  "/images/lummi/img24.png",
-  "/images/lummi/img10.png",
-  "/images/lummi/img11.png",
-  "/images/lummi/img12.png",
-  "/images/lummi/img13.png",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012998/DSC03563_mtatpi.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012895/DSC03828_d79ocl.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012997/DSC03682_q5nlx3.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012894/DSC03822_dpt0xk.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012892/DSC03510_hppdiz.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012894/DSC03847_b6ua9l.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012892/DSC03550_bzuteb.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012891/DSC03761_p8yrh1.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012889/DSC03771_knu2ia.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012888/DSC03731_o87ls3.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012888/DSC03511_qiwl1m.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012887/DSC03747_jqqxel.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/a_-90/v1762014375/DSC03667_1_jnljne.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012888/DSC03511_qiwl1m.jpg",
+  "https://res.cloudinary.com/dum6rd3ye/image/upload/v1762012887/DSC03729_h1dnx3.jpg",
+  
+
 ];
 
 const Skiper30 = () => {
@@ -99,7 +103,7 @@ const Column = ({ images, y }: ColumnProps) => {
           <img
             src={`${src}`}
             alt="image"
-            className="pointer-events-none object-cover"
+            className="pointer-events-none object-cover h-full w-full"
           />
         </div>
       ))}

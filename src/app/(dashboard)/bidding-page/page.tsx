@@ -90,31 +90,32 @@ const Page = () => {
   const sortedBidders = [...bidHistory].sort((a, b) => b.amount - a.amount);
 
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex w-full h-screen  overflow-hidden">
       {/* ✅ Student Info Section */}
       <div className="flex-1 flex justify-center items-center bg-muted">
+         <video
+        src={"https://dqbr6kzn27lfn.cloudfront.net/loopbg.mp4"}
+        autoPlay
+        loop
+        muted
+        className=" absolute inset-0 mask-b-from-[60%]"
+      />
         {currentStudent && (
-          <div className="p-6 shadow rounded-xl w-[80%]">
-            <h2 className="text-xl font-bold text-center mb-4">
-              🎓 Current Student for Auction
+          <div className="p-6  rounded-xl w-[80%] z-50">
+            <h2 className="text-2xl font-bold  mb-4">
+            Current Student for Auction
             </h2>
-            <div className="flex justify-center mb-4">
-              <img
-                src="https://via.placeholder.com/150"
-                alt="Student"
-                className="w-32 h-32 rounded-full border shadow"
-              />
-            </div>
-            <p className="text-lg text-center font-semibold">
+           
+            <p className="text-lg  font-semibold">
               {currentStudent.name}
             </p>
-            <p className="text-center text-sm">{currentStudent.roll_no}</p>
-            <p className="text-center text-sm mb-3">
+            <p className=" text-sm">{currentStudent.roll_no}</p>
+            <p className=" text-sm mb-3">
               {currentStudent.category}
             </p>
 
             <div className="mt-4">
-              <p className="font-semibold mb-2">⭐ Skills</p>
+              <p className="font-semibold mb-2 text-2xl"> Skills</p>
               {Object.entries(currentStudent.skills).map(
                 ([skill, stars], i) => (
                   <p key={i} className="text-sm flex justify-between">
@@ -129,7 +130,7 @@ const Page = () => {
       </div>
 
       {/* ✅ Auction Section */}
-      <Card className="rounded-none w-md flex flex-col justify-between">
+      <Card className="rounded-none w-md flex flex-col justify-between z-50">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Auction Bidding</CardTitle>
           <p className="text-sm text-red-500 font-semibold">
@@ -174,22 +175,11 @@ const Page = () => {
         </CardContent>
 
         <CardFooter className="flex flex-col w-full gap-2 items-start">
-          <h3 className="text-lg font-semibold mb-2">Current Bidders</h3>
-          <div className="h-[200px] overflow-y-auto w-full flex flex-col gap-2">
-            {sortedBidders.map((bidder, index) => (
-              <div
-                key={index}
-                className="w-full flex justify-between items-center p-2 border border-dashed rounded-md"
-              >
-                <span>{bidder.name}</span>
-                <span className="font-bold">₹{bidder.amount}</span>
-              </div>
-            ))}
-          </div>
+         
           {userName && (
             <div className="mt-4 w-full">
               <h4 className="text-md font-semibold mb-2">Your Purchases</h4>
-              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
+              <div className="flex flex-col gap-2  overflow-y-auto">
                 {purchases.length === 0 && <div className="text-sm">No purchases yet.</div>}
                 {purchases.map((p, i) => (
                   <div key={i} className="flex justify-between text-sm border p-2 rounded">
