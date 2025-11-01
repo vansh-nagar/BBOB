@@ -124,8 +124,19 @@ const page = () => {
           )}
         </CardContent>
         <CardFooter>
-          <Link href={"/bidding-page"} className="w-full">
-            <Button disabled={!selectedTeam} className="w-full">
+          <Link
+            href={`/bidding-page?user=${encodeURIComponent(selectedMember)}`}
+            className="w-full"
+          >
+            <Button
+              disabled={!selectedTeam}
+              className="w-full"
+              onClick={() => {
+                try {
+                  if (selectedMember) localStorage.setItem("bob.user", selectedMember);
+                } catch {}
+              }}
+            >
               Proceed to Bidding
             </Button>
           </Link>

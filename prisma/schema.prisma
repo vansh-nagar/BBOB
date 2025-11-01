@@ -13,3 +13,82 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Player {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String   @db.VarChar(100)
+  category          String   @db.VarChar(50)
+  base_price        Int
+  current_bid       Int
+  current_bidder_id String?  @db.Uuid
+  image_url         String?
+  description       String?
+  status            String   @default("upcoming") @db.VarChar(20)
+  auction_start_time DateTime? @db.Timestamptz
+  auction_end_time   DateTime? @db.Timestamptz
+  version           Int      @default(0)
+  created_at        DateTime @default(now()) @db.Timestamptz
+  updated_at        DateTime @default(now()) @updatedAt @db.Timestamptz
+  bids              Bid[]
+  @@index([status])
+  @@index([auction_end_time])
+}
+
+model Bid {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  player_id   String   @db.Uuid
+  bidder_id   String?  @db.Uuid
+  bidder_name String?  @db.VarChar(100)
+  bid_amount  Int
+  timestamp   DateTime @default(now()) @db.Timestamptz
+  ip_address  String?  @db.VarChar(50)
+  player      Player   @relation(fields: [player_id], references: [id])
+  @@index([player_id])
+  @@index([timestamp])
+}
+
+model User {
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String  @db.VarChar(100)
+  email      String  @unique @db.VarChar(255)
+  phone      String? @db.VarChar(20)
+  total_bids Int     @default(0)
+  wins       Int     @default(0)
+  created_at DateTime @default(now()) @db.Timestamptz
+}
+
+model Enquiry {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String   @db.VarChar(100)
+  email        String   @db.VarChar(255)
+  phone        String?  @db.VarChar(20)
+  subject      String   @db.VarChar(200)
+  message      String
+  status       String   @default("pending") @db.VarChar(20)
+  submitted_at DateTime @default(now()) @db.Timestamptz
+  ip_address   String?  @db.VarChar(50)
+  @@index([email])
+  @@index([submitted_at])
+}
+
+model Poll {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question   String
+  options    Json
+  reset_date DateTime @default(now()) @db.Date
+  created_at DateTime @default(now()) @db.Timestamptz
+  votes      PollVote[]
+}
+
+model PollVote {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  poll_id            String   @db.Uuid
+  option_id          String   @db.VarChar(50)
+  voter_fingerprint  String   @db.VarChar(255)
+  voter_ip           String?  @db.VarChar(50)
+  voted_at           DateTime @default(now()) @db.Timestamptz
+  reset_date         DateTime @default(now()) @db.Date
+  poll               Poll     @relation(fields: [poll_id], references: [id])
+  @@unique([poll_id, voter_fingerprint, reset_date])
+  @@index([poll_id])
+}

@@ -10,15 +10,32 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { studentsData } from "@/data/students";
+import { useSearchParams } from "next/navigation";
 
 const Page = () => {
   const [highestBid, setHighestBid] = useState(0);
+  const searchParams = useSearchParams();
   const [userName, setUserName] = useState("");
   const [bidHistory, setBidHistory] = useState<
     { name: string; amount: number }[]
   >([]);
   const [currentStudent, setCurrentStudent] = useState(studentsData[0]);
-  const [timeLeft, setTimeLeft] = useState(10); // Countdown timer (frontend only for now)
+  const [timeLeft, setTimeLeft] = useState(10); // Server-driven
+  const [purchases, setPurchases] = useState<{ student: any; amount: number }[]>([]);
+
+  // Initialize username from query/localStorage
+  useEffect(() => {
+    const fromQuery = searchParams.get("user") ?? "";
+    if (fromQuery) {
+      setUserName(fromQuery);
+      try { localStorage.setItem("bob.user", fromQuery); } catch {}
+      return;
+    }
+    try {
+      const stored = localStorage.getItem("bob.user");
+      if (stored) setUserName(stored);
+    } catch {}
+  }, [searchParams]);
 
   // Place bid
   const handlePlaceBid = async (amount: number) => {
@@ -36,29 +53,29 @@ const Page = () => {
     const data = await res.json();
     if (data.success) {
       setHighestBid(newBid);
-      setBidHistory(data.bids);
+      setBidHistory(Array.isArray(data.bids) ? data.bids : []);
+      if (typeof data.timer === "number") setTimeLeft(data.timer);
+      if (data.currentStudent) setCurrentStudent(data.currentStudent);
     }
   };
 
-  // Poll bids every 2 sec
+  // Poll bids and timer every 1 sec; include user to get purchases
   useEffect(() => {
     const fetchBids = async () => {
-      const res = await fetch("/api/bid");
+      const q = userName ? `?user=${encodeURIComponent(userName)}` : "";
+      const res = await fetch(`/api/bid${q}`);
       const data = await res.json();
-      setBidHistory(data.bids);
-      if (data.bids.length > 0) setHighestBid(data.bids[0].amount);
+      const bids = Array.isArray(data.bids) ? data.bids : [];
+      setBidHistory(bids);
+      if (bids.length > 0) setHighestBid(bids[0].amount);
+      if (typeof data.timer === "number") setTimeLeft(data.timer);
+      if (Array.isArray(data.purchases)) setPurchases(data.purchases);
+      if (data.currentStudent) setCurrentStudent(data.currentStudent);
     };
     fetchBids();
-    const interval = setInterval(fetchBids, 2000);
+    const interval = setInterval(fetchBids, 1000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Countdown Timer Logic
-  useEffect(() => {
-    if (timeLeft === 0) return;
-    const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft]);
+  }, [userName]);
 
   // Random Student Change
   const nextStudent = () => {
@@ -169,6 +186,20 @@ const Page = () => {
               </div>
             ))}
           </div>
+          {userName && (
+            <div className="mt-4 w-full">
+              <h4 className="text-md font-semibold mb-2">Your Purchases</h4>
+              <div className="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                {purchases.length === 0 && <div className="text-sm">No purchases yet.</div>}
+                {purchases.map((p, i) => (
+                  <div key={i} className="flex justify-between text-sm border p-2 rounded">
+                    <span>{p.student?.name ?? "Student"}</span>
+                    <span className="font-bold">₹{p.amount}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <Button className="mt-4 w-full" onClick={nextStudent}>
             🎯 Next Random Student
           </Button>
