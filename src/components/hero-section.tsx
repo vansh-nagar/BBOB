@@ -23,7 +23,7 @@ export default function HeroSection() {
             <div className="relative mx-auto flex w-full max-w-6xl flex-col px-6 lg:block">
               <div className="mx-auto max-w-lg text-center lg:ml-0 lg:w-1/2 lg:text-left">
                 <h1 className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16 xl:text-7xl ">
-                  Battlwe of Bytes Auction Event
+                  Battle of Bytes Auction Event
                 </h1>
                 <p className="mt-8 max-w-2xl text-pretty text-lg ">
                   Where Logic Meets Bidding. Web Dev Round 6 – Auction
